@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "production_loc": 2309,
+    "production_files": 26,
+    "production_packages": 22,
+    "test_files": 9,
+    "production_functions": 181,
+    "decision_points": 326
+  },
+  "persistence": {
+    "module": "go.etcd.io/bbolt",
+    "entities": ["Record", "AuditEvent", "Workflow", "Attachment"],
+    "reopen_test": "TestPersistenceSurvivesReopen"
+  },
+  "workflows": [
+    {
+      "steps": ["create a draft invitation", "submit it for reviewer approval", "publish the approved invitation", "archive the completed event"],
+      "test": "TestWorkflowCreateReviewArchive"
+    },
+    {
+      "steps": ["search records by title, host, status, or tag", "select the matching record", "update its lifecycle state", "publish and export the current record"],
+      "test": "TestWorkflowSearchUpdatePublish"
+    },
+    {
+      "steps": ["parse pipe-delimited import rows", "validate fields and event bounds", "persist accepted records with audit events", "report imported identifiers and errors"],
+      "test": "TestWorkflowImportReport"
+    }
+  ]
+}
