@@ -12,10 +12,9 @@ import (
 )
 
 type Handler struct {
-	Repo     *repository.Repository
-	Clock    clock.Clock
-	mu       sync.Mutex
-	previous *model.ExportResult
+	Repo  *repository.Repository
+	Clock clock.Clock
+	mu    sync.Mutex
 }
 
 func New(repo *repository.Repository, c clock.Clock) *Handler { return &Handler{Repo: repo, Clock: c} }
@@ -31,15 +30,9 @@ func (h *Handler) Export(ctx context.Context, id string) (model.ExportResult, er
 	select {
 	case <-ctx.Done():
 		result.Cancelled = true
-		if h.previous != nil {
-			stale := *h.previous
-			stale.Cancelled = true
-			return stale, nil
-		}
-		return result, ctx.Err()
+		return result, nil
 	default:
 	}
-	h.previous = &result
 	return result, nil
 }
 
